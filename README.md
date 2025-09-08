@@ -72,7 +72,7 @@ pip (Python package installer)
 
 1. Clone the repository:
 
-git clone [https://github.com/your-username/ask-rachel.git](https://github.com/your-username/ask-rachel.git)
+git clone [(https://github.com/rachel-prijatna/personal-knowledge-hub.git)]
 cd ask-rachel
 
 2. Create a virtual environment (recommended):
