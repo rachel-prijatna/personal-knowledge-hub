@@ -1,16 +1,17 @@
-Ask Rachel - A Personal AI Knowledge Hub
+**Ask Rachel - A Personal AI Knowledge Hub**
+
 "Ask Rachel" is an AI assistant you can chat with. Rachel's knowledge comes from a curated set of documents, allowing you to ask detailed questions and get conversational, accurate answers. It's like having a personal expert on a specific topic, ready to help you find the information you need.
 
 This project is built with privacy and accessibility in mind, using free, open-source, and locally-runnable tools.
 
-How to Use
+**How to Use**
 Navigate to the chat interface.
 
 Type your question in the text box at the bottom of the screen.
 
 Press Send and get your answer!
 
-Features
+**Features**
 Public Query Interface: A user-friendly chat interface for anyone to ask questions.
 
 AI-Powered Search: Uses modern vector embeddings to understand the semantic meaning of your questions, finding the most relevant information even if the keywords don't match exactly.
@@ -22,7 +23,7 @@ Personal Knowledge Curation: The knowledge base is built from a specific set of 
 For Developers: Running This Project Locally
 The following sections provide details on the project's architecture and how to set it up on your own machine.
 
-Architecture Overview
+**Architecture Overview**
 The application is split into two primary workflows:
 
 1. Data Ingestion Flow
