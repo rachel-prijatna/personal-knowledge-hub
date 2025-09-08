@@ -1,0 +1,6 @@
+flask
+PyPDF2
+langchain
+chromadb
+sentence-transformers
+langchain-community

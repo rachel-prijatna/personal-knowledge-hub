@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin: Add Knowledge</title>
+    <style>
+      body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background: #0f172a; color: #e5e7eb; display: grid; place-items: center; min-height: 100vh; }
+      .card { width: min(560px, 92vw); background: #111827; border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 14px; padding: 22px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+      h1 { margin-top: 0; font-size: 22px; }
+      form { display: grid; gap: 14px; }
+      input[type="file"] { padding: 12px; background: rgba(255,255,255,0.04); color: #e5e7eb; border-radius: 10px; border: 1px solid rgba(139, 92, 246, 0.25); }
+      button { padding: 12px 18px; border-radius: 10px; background: linear-gradient(135deg, #8b5cf6, #3b82f6); border: none; color: white; font-weight: 600; cursor: pointer; }
+      a { color: #93c5fd; text-decoration: none; }
+      .messages { margin-top: 10px; color: #fde68a; font-size: 14px; }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <h1>Admin: Add Knowledge</h1>
+      <form action="/upload" method="post" enctype="multipart/form-data">
+        <label for="file">Select a .txt or .pdf file:</label>
+        <input id="file" name="file" type="file" accept=".txt,.pdf" required />
+        <button type="submit">Upload</button>
+      </form>
+      <div class="messages">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for message in messages %}
+              <div>{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+      </div>
+      <p><a href="/">Back to Ask Rachel</a></p>
+    </div>
+  </body>
+  </html>
+
