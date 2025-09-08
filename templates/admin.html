@@ -1,39 +1,235 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Admin: Add Knowledge</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Add Knowledge</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-      body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background: #0f172a; color: #e5e7eb; display: grid; place-items: center; min-height: 100vh; }
-      .card { width: min(560px, 92vw); background: #111827; border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 14px; padding: 22px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
-      h1 { margin-top: 0; font-size: 22px; }
-      form { display: grid; gap: 14px; }
-      input[type="file"] { padding: 12px; background: rgba(255,255,255,0.04); color: #e5e7eb; border-radius: 10px; border: 1px solid rgba(139, 92, 246, 0.25); }
-      button { padding: 12px 18px; border-radius: 10px; background: linear-gradient(135deg, #8b5cf6, #3b82f6); border: none; color: white; font-weight: 600; cursor: pointer; }
-      a { color: #93c5fd; text-decoration: none; }
-      .messages { margin-top: 10px; color: #fde68a; font-size: 14px; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #FDF8F5; /* Soft beige background */
+            color: #5C4B4B;
+        }
+        .admin-card {
+            background-color: #F5EBE0;
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .submit-btn {
+            background-color: #D5B4B4; /* Muted blush pink for button */
+            transition: background-color 0.3s ease;
+            color: white;
+        }
+        .submit-btn:hover {
+            background-color: #C3A3A3;
+        }
+        .submit-btn:disabled {
+            background-color: #E5E5E5;
+            color: #999;
+            cursor: not-allowed;
+        }
+        .file-input-label {
+            border: 2px dashed #D5B4B4;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 0.5rem;
+            transition: all 0.3s ease;
+        }
+        .file-input-label:hover {
+            border-color: #C3A3A3;
+            background-color: rgba(213, 180, 180, 0.1);
+        }
+        .file-input-label.has-file {
+            border-color: #A8B5A0;
+            background-color: rgba(168, 181, 160, 0.1);
+        }
+        .file-info {
+            background-color: rgba(168, 181, 160, 0.1);
+            border: 1px solid #A8B5A0;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+        .message {
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+        .message.success {
+            background-color: rgba(168, 181, 160, 0.1);
+            color: #5A6B5A;
+            border: 1px solid #A8B5A0;
+        }
+        .message.error {
+            background-color: rgba(213, 180, 180, 0.1);
+            color: #8B6B6B;
+            border: 1px solid #D5B4B4;
+        }
     </style>
-  </head>
-  <body>
-    <div class="card">
-      <h1>Admin: Add Knowledge</h1>
-      <form action="/upload" method="post" enctype="multipart/form-data">
-        <label for="file">Select a .txt or .pdf file:</label>
-        <input id="file" name="file" type="file" accept=".txt,.pdf" required />
-        <button type="submit">Upload</button>
-      </form>
-      <div class="messages">
-        {% with messages = get_flashed_messages() %}
-          {% if messages %}
-            {% for message in messages %}
-              <div>{{ message }}</div>
-            {% endfor %}
-          {% endif %}
-        {% endwith %}
-      </div>
-      <p><a href="/">Back to Ask Rachel</a></p>
-    </div>
-  </body>
-  </html>
+</head>
+<body class="flex items-center justify-center min-h-screen">
 
+    <div class="max-w-md w-full">
+        <div class="admin-card">
+            <h1 class="text-2xl font-semibold text-center text-gray-700 mb-6">📚 Add to Knowledge Base</h1>
+            
+            <!-- Flash Messages -->
+            <div id="messages">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="message {% if 'success' in message.lower() or 'processed' in message.lower() %}success{% else %}error{% endif %}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+            </div>
+
+            <form action="/upload" method="post" enctype="multipart/form-data" id="uploadForm">
+                <div class="mb-4">
+                    <label for="file-upload" class="file-input-label block w-full" id="file-label">
+                        <div class="text-4xl mb-2">📄</div>
+                        <span id="label-text">Drag & Drop or Click to Select File</span>
+                        <div class="text-sm text-gray-500 mt-2">Supports .txt and .pdf files</div>
+                    </label>
+                    <input id="file-upload" name="file" type="file" class="hidden" accept=".txt,.pdf" required>
+                    
+                    <div class="file-info" id="file-info">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="font-semibold" id="file-name">No file selected</div>
+                                <div class="text-sm text-gray-500" id="file-size"></div>
+                            </div>
+                            <button type="button" id="remove-file" class="text-red-500 hover:text-red-700">✕</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="text-center">
+                    <button type="submit" class="submit-btn font-bold py-3 px-4 rounded-lg w-full" id="upload-btn" disabled>
+                        <span id="btn-text">Select a file to upload</span>
+                    </button>
+                </div>
+            </form>
+
+            <div class="text-center mt-4">
+                <a href="/" class="text-sm text-gray-600 hover:text-gray-800 underline">← Back to Ask Rachel</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const fileInput = document.getElementById('file-upload');
+        const fileLabel = document.getElementById('file-label');
+        const labelText = document.getElementById('label-text');
+        const fileInfo = document.getElementById('file-info');
+        const fileName = document.getElementById('file-name');
+        const fileSize = document.getElementById('file-size');
+        const removeFileBtn = document.getElementById('remove-file');
+        const uploadBtn = document.getElementById('upload-btn');
+        const btnText = document.getElementById('btn-text');
+        const uploadForm = document.getElementById('uploadForm');
+
+        // File selection handling
+        fileInput.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                showFileInfo(file);
+                enableUpload();
+            }
+        });
+
+        // Drag and drop handling
+        fileLabel.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            fileLabel.style.borderColor = '#A8B5A0';
+            fileLabel.style.backgroundColor = 'rgba(168, 181, 160, 0.1)';
+        });
+
+        fileLabel.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            fileLabel.style.borderColor = '#D5B4B4';
+            fileLabel.style.backgroundColor = 'transparent';
+        });
+
+        fileLabel.addEventListener('drop', function(e) {
+            e.preventDefault();
+            fileLabel.style.borderColor = '#D5B4B4';
+            fileLabel.style.backgroundColor = 'transparent';
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                const file = files[0];
+                showFileInfo(file);
+                enableUpload();
+            }
+        });
+
+        // Remove file
+        removeFileBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            fileInput.value = '';
+            hideFileInfo();
+            disableUpload();
+        });
+
+        // Form submission
+        uploadForm.addEventListener('submit', function(e) {
+            if (!fileInput.files[0]) {
+                e.preventDefault();
+                return;
+            }
+            
+            uploadBtn.disabled = true;
+            btnText.textContent = 'Uploading...';
+            uploadBtn.style.backgroundColor = '#E5E5E5';
+        });
+
+        function showFileInfo(file) {
+            const fileSizeMB = (file.size / 1024 / 1024).toFixed(2);
+            fileName.textContent = file.name;
+            fileSize.textContent = `${fileSizeMB} MB`;
+            fileInfo.style.display = 'block';
+            fileLabel.classList.add('has-file');
+            labelText.textContent = 'File selected! Click to change';
+        }
+
+        function hideFileInfo() {
+            fileInfo.style.display = 'none';
+            fileLabel.classList.remove('has-file');
+            labelText.textContent = 'Drag & Drop or Click to Select File';
+        }
+
+        function enableUpload() {
+            uploadBtn.disabled = false;
+            uploadBtn.style.backgroundColor = '#D5B4B4';
+            btnText.textContent = 'Upload File';
+        }
+
+        function disableUpload() {
+            uploadBtn.disabled = true;
+            uploadBtn.style.backgroundColor = '#E5E5E5';
+            btnText.textContent = 'Select a file to upload';
+        }
+
+        // Clear messages after 5 seconds
+        setTimeout(function() {
+            const messages = document.getElementById('messages');
+            if (messages) {
+                messages.style.opacity = '0';
+                setTimeout(function() {
+                    messages.innerHTML = '';
+                }, 500);
+            }
+        }, 5000);
+    </script>
+</body>
+</html>

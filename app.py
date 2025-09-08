@@ -3,8 +3,9 @@ import os
 from werkzeug.utils import secure_filename
 from PyPDF2 import PdfReader
 from langchain.text_splitter import CharacterTextSplitter
-from langchain.vectorstores import Chroma
-from langchain.embeddings import HuggingFaceEmbeddings
+from langchain_community.vectorstores import Chroma
+from langchain_community.embeddings import HuggingFaceEmbeddings
+import google.generativeai as genai
 
 
 app = Flask(__name__)
@@ -21,9 +22,15 @@ os.makedirs(CHROMA_DB_DIR, exist_ok=True)
 
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
+# Configure Google Gemini API
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+
 # Initialize embeddings and persistent Chroma store
 embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 vectorstore = Chroma(persist_directory=CHROMA_DB_DIR, embedding_function=embeddings)
+
+# Initialize Gemini model
+model = genai.GenerativeModel('gemini-1.5-flash-latest')
 
 
 def is_allowed_filename(filename: str) -> bool:
@@ -91,7 +98,7 @@ def upload():
     # Embed and store chunks into persistent Chroma vector DB
     try:
         vectorstore.add_texts(chunks)
-        vectorstore.persist()
+        # Note: Chroma 0.4+ automatically persists, no need for manual persist()
     except Exception as exc:
         flash(f"Failed to store embeddings: {exc}")
         return redirect(url_for("admin"))
@@ -114,9 +121,22 @@ def ask():
         context_chunks = [doc.page_content for doc in results]
         context = "\n\n".join(context_chunks) if context_chunks else ""
 
+        # Create prompt for Gemini API
+        prompt = f"""Answer the following question based only on the provided context. If the answer is not in the context, say 'I do not have information on that.'
+
+Context:
+{context}
+
+Question:
+{question}"""
+
+        # Generate response using Gemini API
+        response = model.generate_content(prompt)
+        answer = response.text
+
         return jsonify({
             "question": question,
-            "context": context,
+            "answer": answer,
         })
     except Exception as exc:
         return jsonify({"error": f"Failed to process question: {exc}"}), 500
