@@ -77,7 +77,7 @@ git clone [(https://github.com/rachel-prijatna/personal-knowledge-hub.git)]
 2. Create a virtual environment (recommended):
 
 python -m venv venv
-source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+source venv/bin/activate
 
 3. Install dependencies:
 A requirements.txt file should be created containing the following:
@@ -87,6 +87,9 @@ langchain
 chromadb
 pypdf2
 sentence-transformers
+.
+.
+.
 
 Install them with:
 
