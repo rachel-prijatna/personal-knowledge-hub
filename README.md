@@ -96,7 +96,7 @@ How to Run
 1. Run the Application:
 Execute the following command in your terminal from the project's root directory:
 
-flask run
+python app.py
 
 The application will be available at http://127.0.0.1:5000.
 
