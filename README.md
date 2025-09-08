@@ -61,7 +61,7 @@ PDF/Text Processing: PyPDF2
 
 Frontend: HTML, CSS, and vanilla JavaScript
 
-Setup and Installation
+**Setup and Installation**
 Follow these steps to get the project running on your local machine.
 
 Prerequisites:
@@ -80,18 +80,6 @@ python -m venv venv
 source venv/bin/activate
 
 3. Install dependencies:
-A requirements.txt file should be created containing the following:
-
-Flask
-langchain
-chromadb
-pypdf2
-sentence-transformers
-.
-.
-.
-
-Install them with:
 
 pip install -r requirements.txt
 
