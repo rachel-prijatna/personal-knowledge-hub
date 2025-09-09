@@ -3,234 +3,244 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rachel's Personal Hub</title>
+    <title>Ask Rachel</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
-        html {
-            scroll-behavior: smooth;
+        @keyframes gradient-animation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #FDF8F5; /* Soft beige background */
+            font-family: 'Nunito Sans', sans-serif;
+            background: linear-gradient(-45deg, #FDF8F5, #F5EBE0, #EAD7D7, #FDF8F5);
+            background-size: 400% 400%;
+            animation: gradient-animation 15s ease infinite;
             color: #5C4B4B;
         }
+
+        .font-display {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Custom color palette */
+        .bg-beige { background-color: #F5EBE0; }
+        .text-blush { color: #D5B4B4; }
+        .bg-blush-light { background-color: #EAD7D7; }
+        .bg-blush-dark { background-color: #D5B4B4; }
+        .border-blush { border-color: #D5B4B4; }
+
+        /* Navigation hover effect */
         .nav-link {
+            position: relative;
             transition: color 0.3s ease;
         }
-        .nav-link:hover {
-            color: #D5B4B4; /* Muted blush pink for hover */
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #D5B4B4;
+            transition: width 0.3s ease;
         }
-        .chat-container {
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            background-color: #F5EBE0; /* Cream main container */
+        .nav-link:hover::after {
+            width: 100%;
         }
-        .user-msg {
-            background-color: #E3D1D1; /* Blush pink for user */
-            color: #5C4B4B;
+
+        /* Chat bubble styling and animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .bot-msg {
-            background-color: #FEFCF3; /* Off-white for bot */
-            color: #6B6B6B;
+        .chat-bubble {
+            animation: fadeIn 0.3s ease forwards;
         }
-        .input-area {
-            background-color: #EADFD7; /* Slightly darker beige */
-        }
-        .send-btn {
-            background-color: #D5B4B4; /* Muted blush pink for button */
-            transition: background-color 0.3s ease;
-        }
-        .send-btn:hover {
-            background-color: #C3A3A3;
-        }
-        .section-card {
-            background-color: #F5EBE0;
-            border-radius: 1rem;
-            padding: 2rem;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-        #chat-messages::-webkit-scrollbar {
+
+        /* Custom scrollbar */
+        #chat-window::-webkit-scrollbar {
             width: 6px;
         }
-        #chat-messages::-webkit-scrollbar-track {
+        #chat-window::-webkit-scrollbar-track {
             background: #F5EBE0;
         }
-        #chat-messages::-webkit-scrollbar-thumb {
-            background-color: #E3D1D1;
-            border-radius: 20px;
+        #chat-window::-webkit-scrollbar-thumb {
+            background-color: #D5B4B4;
+            border-radius: 10px;
+        }
+
+        /* Typing indicator animation */
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1.0); }
+        }
+        .typing-dot {
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        /* Reveal on scroll animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        html {
+             scroll-behavior: smooth;
         }
     </style>
 </head>
-<body class="w-full">
+<body class="flex flex-col min-h-screen">
 
     <!-- Header & Navigation -->
-    <header class="bg-[#FDF8F5]/80 backdrop-blur-sm sticky top-0 z-50 border-b border-[#EADFD7]">
-        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16">
-                <div class="flex-shrink-0">
-                    <a href="#" class="text-2xl font-semibold nav-link">Rachel</a>
-                </div>
-                <div class="hidden md:block">
-                    <div class="ml-10 flex items-baseline space-x-4">
-                        <a href="#ask-rachel" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Ask Rachel</a>
-                        <a href="#portfolio" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Portfolio</a>
-                        <a href="#teaching" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Teaching Assistant</a>
-                        <a href="#hobbies" class="nav-link px-3 py-2 rounded-md text-sm font-medium">Hobbies</a>
-                    </div>
-                </div>
-                <!-- Mobile menu button -->
-                <div class="-mr-2 flex md:hidden">
-                    <button id="mobile-menu-button" class="inline-flex items-center justify-center p-2 rounded-md text-[#5C4B4B] hover:text-white hover:bg-[#D5B4B4] focus:outline-none">
-                        <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                        </svg>
-                    </button>
-                </div>
+    <header class="bg-beige/80 backdrop-blur-sm shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-xl font-semibold text-gray-700 font-display">Rachel's Hub</div>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#home" class="nav-link text-gray-600 hover:text-blush">Home</a>
+                <a href="#about" class="nav-link text-gray-600 hover:text-blush">About</a>
+                <a href="#ta" class="nav-link text-gray-600 hover:text-blush">Teaching</a>
+                <a href="#hobbies" class="nav-link text-gray-600 hover:text-blush">Hobbies</a>
             </div>
         </nav>
-        <!-- Mobile menu -->
-        <div id="mobile-menu" class="md:hidden hidden">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="#ask-rachel" class="nav-link block px-3 py-2 rounded-md text-base font-medium">Ask Rachel</a>
-                <a href="#portfolio" class="nav-link block px-3 py-2 rounded-md text-base font-medium">Portfolio</a>
-                <a href="#teaching" class="nav-link block px-3 py-2 rounded-md text-base font-medium">Teaching Assistant</a>
-                <a href="#hobbies" class="nav-link block px-3 py-2 rounded-md text-base font-medium">Hobbies</a>
-            </div>
-        </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        
-        <!-- Ask Rachel Section -->
-        <section id="ask-rachel" class="min-h-[90vh] flex flex-col items-center justify-center">
-            <div class="chat-container w-full max-w-2xl h-[90vh] md:h-[80vh] flex flex-col rounded-2xl">
-                <div class="p-6 border-b border-gray-200/50 text-center">
-                    <h1 class="text-2xl font-semibold text-gray-700">Ask Rachel</h1>
-                    <p class="text-sm text-gray-500 mt-1">Your Personal AI Knowledge Hub</p>
+    <!-- Main Content -->
+    <main class="flex-grow">
+        <!-- Hero Section -->
+        <section id="home" class="h-screen flex items-center justify-center text-center">
+            <div class="reveal">
+                <h1 class="text-5xl md:text-7xl font-bold font-display text-gray-800">Welcome to My Hub</h1>
+                <p class="mt-4 text-lg text-gray-600">I'm Rachel. This is my personal space, powered by AI.</p>
+                <a href="#chat-section" class="mt-8 inline-block bg-blush-dark text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:bg-opacity-80 transition duration-300">
+                    Meet My AI
+                </a>
+            </div>
+        </section>
+
+        <!-- Chat Section -->
+        <section id="chat-section" class="py-20 flex items-center justify-center">
+            <div class="w-full max-w-2xl h-[70vh] flex flex-col bg-white/60 backdrop-blur-sm shadow-xl rounded-2xl border border-gray-200/50 reveal">
+                <!-- Chat Header -->
+                <div class="p-4 border-b border-gray-200/80">
+                    <h1 class="text-2xl font-bold text-center text-gray-700 font-display">Ask Rachel</h1>
+                    <p class="text-sm text-center text-gray-500">Your Personal AI Knowledge Hub</p>
                 </div>
-                <div id="chat-messages" class="flex-1 p-6 overflow-y-auto">
-                    <div class="flex justify-start mb-4">
-                        <div class="bot-msg rounded-lg rounded-bl-none p-3 max-w-md"><p class="text-sm">Hello! How can I help you today?</p></div>
+
+                <!-- Chat Window -->
+                <div id="chat-window" class="flex-1 p-6 space-y-4 overflow-y-auto">
+                    <!-- Initial Welcome Message -->
+                    <div class="flex justify-start chat-bubble">
+                        <div class="bg-beige rounded-2xl rounded-bl-none p-3 max-w-sm">
+                            <p class="text-sm text-gray-800">Hello! How can I help you today? Feel free to ask me anything about Rachel's portfolio, teaching experience, or hobbies.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="input-area p-4 rounded-b-2xl">
-                    <div class="flex items-center">
-                        <input type="text" id="user-input" placeholder="Ask me anything..." class="w-full px-4 py-2 rounded-full border-none focus:ring-2 focus:ring-[#E3D1D1] focus:outline-none transition" autocomplete="off">
-                        <button id="send-btn" class="send-btn ml-3 p-2 rounded-full text-white flex-shrink-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" /></svg>
+
+                <!-- Chat Input -->
+                <div class="p-4 bg-beige/50 border-t border-gray-200/80">
+                    <form id="chat-form" class="flex items-center space-x-3">
+                        <input id="chat-input" type="text" placeholder="Ask me anything..." autocomplete="off"
+                               class="w-full px-4 py-3 text-sm text-gray-700 bg-white border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-blush-dark/50 transition duration-300">
+                        <button type="submit" class="bg-blush-dark text-white rounded-full p-3 hover:bg-opacity-80 transition duration-300 shadow-md">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.428A1 1 0 0010 16h.008a1 1 0 00.724-.316l5-1.428a1 1 0 001.17-1.408l-7-14z" />
+                            </svg>
                         </button>
-                    </div>
+                    </form>
                 </div>
             </div>
         </section>
 
-        <!-- Portfolio Section -->
-        <section id="portfolio" class="py-20">
-            <div class="section-card">
-                <h2 class="text-3xl font-bold text-center mb-8">Portfolio</h2>
-                <div class="text-center text-gray-600">
-                    <p>This section is under construction. My project portfolio will be showcased here soon!</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Teaching Assistant Section -->
-        <section id="teaching" class="py-20">
-             <div class="section-card">
-                <h2 class="text-3xl font-bold text-center mb-8">Teaching Assistant</h2>
-                <div class="text-center text-gray-600">
-                    <p>This section is under construction. Information about my teaching assistant roles and responsibilities will be available here.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Hobbies Section -->
-        <section id="hobbies" class="py-20">
-             <div class="section-card">
-                <h2 class="text-3xl font-bold text-center mb-8">Hobbies</h2>
-                <div class="text-center text-gray-600">
-                    <p>This section is under construction. Come back later to learn more about my personal interests and hobbies!</p>
-                </div>
-            </div>
-        </section>
+        <!-- Placeholder Sections for Navigation -->
+        <section id="about" class="h-96 container mx-auto p-8 reveal"><h2 class="text-4xl font-display">About</h2></section>
+        <section id="ta" class="h-96 container mx-auto p-8 reveal"><h2 class="text-4xl font-display">Teaching</h2></section>
+        <section id="hobbies" class="h-96 container mx-auto p-8 reveal"><h2 class="text-4xl font-display">Hobbies</h2></section>
 
     </main>
 
     <script>
         // --- Chat Logic ---
-        const chatMessages = document.getElementById('chat-messages');
-        const userInput = document.getElementById('user-input');
-        const sendBtn = document.getElementById('send-btn');
+        const chatForm = document.getElementById('chat-form');
+        const chatInput = document.getElementById('chat-input');
+        const chatWindow = document.getElementById('chat-window');
 
-        const appendMessage = (sender, message) => {
-            const messageWrapper = document.createElement('div');
-            const messageBubble = document.createElement('div');
-            messageWrapper.classList.add('flex', 'mb-4');
-            messageBubble.classList.add('p-3', 'rounded-lg', 'max-w-md');
-            if (sender === 'user') {
-                messageWrapper.classList.add('justify-end');
-                messageBubble.classList.add('user-msg', 'rounded-br-none');
-                messageBubble.innerHTML = `<p class="text-sm font-medium">${message}</p>`;
-            } else {
-                messageWrapper.classList.add('justify-start');
-                messageBubble.classList.add('bot-msg', 'rounded-bl-none');
-                messageBubble.innerHTML = `<p class="text-sm">${message}</p>`;
-            }
-            messageWrapper.appendChild(messageBubble);
-            chatMessages.appendChild(messageWrapper);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        };
-
-        const handleSendMessage = async () => {
-            const question = userInput.value.trim();
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const question = chatInput.value.trim();
             if (!question) return;
-            appendMessage('user', question);
-            userInput.value = '';
-
-            const thinkingIndicator = document.createElement('div');
-            thinkingIndicator.classList.add('flex', 'justify-start', 'mb-4', 'bot-thinking');
-            thinkingIndicator.innerHTML = `<div class="bot-msg rounded-lg rounded-bl-none p-3 max-w-md"><p class="text-sm italic text-gray-500">Rachel is thinking...</p></div>`;
-            chatMessages.appendChild(thinkingIndicator);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-
+            addMessage(question, 'user');
+            chatInput.value = '';
+            showTypingIndicator();
             try {
                 const response = await fetch('/ask', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ question: question }),
+                    body: JSON.stringify({ question }),
                 });
-                chatMessages.removeChild(thinkingIndicator);
-                if (!response.ok) throw new Error('Network response was not ok.');
+                if (!response.ok) throw new Error(`Server error: ${response.status}`);
                 const data = await response.json();
-                const formattedResponse = data.answer.replace(/\\n/g, '<br>');
-                appendMessage('bot', formattedResponse);
+                hideTypingIndicator();
+                addMessage(data.answer || "Sorry, I couldn't find an answer.", 'rachel');
             } catch (error) {
-                console.error('Error:', error);
-                const indicator = document.querySelector('.bot-thinking');
-                if (indicator) chatMessages.removeChild(indicator);
-                appendMessage('bot', 'Sorry, I encountered an error. Please try again.');
+                console.error('Error fetching response:', error);
+                hideTypingIndicator();
+                addMessage("Sorry, I encountered an error. Please try again.", 'rachel');
             }
-        };
-
-        sendBtn.addEventListener('click', handleSendMessage);
-        userInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') handleSendMessage();
         });
 
-        // --- Mobile Menu Logic ---
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        mobileMenuButton.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-        
-        // Close mobile menu when a link is clicked
-        document.querySelectorAll('#mobile-menu a').forEach(link => {
-            link.addEventListener('click', () => {
-                mobileMenu.classList.add('hidden');
+        function addMessage(text, sender) {
+            const messageWrapper = document.createElement('div');
+            messageWrapper.classList.add('flex', 'chat-bubble');
+            if (sender === 'user') {
+                messageWrapper.classList.add('justify-end');
+                messageWrapper.innerHTML = `<div class="bg-blush-light rounded-2xl rounded-br-none p-3 max-w-sm"><p class="text-sm text-gray-800">${text}</p></div>`;
+            } else {
+                messageWrapper.classList.add('justify-start');
+                messageWrapper.innerHTML = `<div class="bg-beige rounded-2xl rounded-bl-none p-3 max-w-sm"><p class="text-sm text-gray-800">${text}</p></div>`;
+            }
+            chatWindow.appendChild(messageWrapper);
+            scrollToBottom();
+        }
+
+        function showTypingIndicator() {
+            const indicator = document.createElement('div');
+            indicator.id = 'typing-indicator';
+            indicator.classList.add('flex', 'justify-start', 'chat-bubble');
+            indicator.innerHTML = `<div class="bg-beige rounded-2xl rounded-bl-none p-3 max-w-sm"><div class="flex items-center space-x-1"><div class="typing-dot h-2 w-2 bg-blush-dark rounded-full"></div><div class="typing-dot h-2 w-2 bg-blush-dark rounded-full"></div><div class="typing-dot h-2 w-2 bg-blush-dark rounded-full"></div></div></div>`;
+            chatWindow.appendChild(indicator);
+            scrollToBottom();
+        }
+
+        function hideTypingIndicator() {
+            const indicator = document.getElementById('typing-indicator');
+            if (indicator) indicator.remove();
+        }
+
+        function scrollToBottom() {
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        }
+
+        // --- Reveal on Scroll Logic ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
             });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
         });
     </script>
-
 </body>
 </html>
