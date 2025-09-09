@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ask Rachel</title>
+    <title>Ask Rachel - Personal AI Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <style>
@@ -107,8 +107,7 @@
             <div class="hidden md:flex items-center space-x-8">
                 <a href="#home" class="nav-link text-gray-600 hover:text-blush">Home</a>
                 <a href="#about" class="nav-link text-gray-600 hover:text-blush">About</a>
-                <!-- <a href="#ta" class="nav-link text-gray-600 hover:text-blush">Teaching</a>
-                <a href="#hobbies" class="nav-link text-gray-600 hover:text-blush">Hobbies</a> -->
+                <a href="#ta" class="nav-link text-gray-600 hover:text-blush">Teaching</a>
             </div>
         </nav>
     </header>
@@ -140,7 +139,7 @@
                     <!-- Initial Welcome Message -->
                     <div class="flex justify-start chat-bubble">
                         <div class="bg-beige rounded-2xl rounded-bl-none p-3 max-w-sm">
-                            <p class="text-sm text-gray-800">Hello! How can I help you today? Feel free to ask me anything about Rachel's portfolio, teaching experience, or hobbies.</p>
+                            <p class="text-sm text-gray-800">Hello! How can I help you today? Feel free to ask me anything about my portfolio, teaching experience, or hobbies.</p>
                         </div>
                     </div>
                 </div>
@@ -160,14 +159,51 @@
             </div>
         </section>
 
-        <!-- Placeholder Sections for Navigation -->
-        <section id="about" class="h-96 container mx-auto p-8 reveal"><h2 class="text-4xl font-display">About</h2></section>
-        <!--
+        <!-- About Section -->
+        <section id="about" class="container mx-auto px-6 py-16 md:py-24">
+            <div class="reveal">
+                <h1 class="text-5xl md:text-6xl font-bold font-display text-center text-gray-800">About Me</h1>
+                
+                <div class="mt-16 grid grid-cols-1 md:grid-cols-3 gap-12 items-center">
+                    <!-- Photo Section -->
+                    <div class="md:col-span-1 flex justify-center">
+                        <div class="w-64 h-80 md:w-80 md:h-96 bg-blush-light rounded-2xl shadow-xl p-3">
+                          <img src="{{ url_for('static', filename='rachel.jpg') }}"
+                          alt="Rachel"
+                          class="w-full h-full object-cover rounded-lg">
+                        </div>
+                    </div>
+
+                    <!-- Biography Section -->
+                    <div class="md:col-span-2">
+                        <h2 class="text-3xl font-display text-gray-700">Connecting the dots between ideas and people.</h2>
+                        <p class="mt-6 text-lg text-gray-600 leading-relaxed">
+                            I believe the most exciting innovations happen at the intersection of different worlds. My passion lies in exploring these connections—whether it's between technology and storytelling, data and design, or logic and intuition.
+                        </p>
+                        <p class="mt-4 text-lg text-gray-600 leading-relaxed">
+                            This curiosity drives everything I do. It's about finding new ways to bring ideas to life and create tools that feel a little more human.
+                        </p>
+                        <div class="mt-8 flex space-x-4">
+                          <a href="https://www.linkedin.com/in/rachelprijatna" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-blush transition-colors duration-300">LinkedIn</a>
+                          <a href="https://github.com/rachel-prijatna" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-blush transition-colors duration-300">GitHub</a>
+                          <a href="/static/resume_9.9.25.pdf" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-blush transition-colors duration-300">Resume</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Placeholder Section for Teaching -->
         <section id="ta" class="h-96 container mx-auto p-8 reveal"><h2 class="text-4xl font-display">Teaching</h2></section>
-        <section id="hobbies" class="h-96 container mx-auto p-8 reveal"><h2 class="text-4xl font-display">Hobbies</h2></section>
-        -->
 
     </main>
+    
+    <footer class="bg-beige/80 py-4 mt-16">
+        <div class="container mx-auto text-center text-sm text-gray-600">
+            <p>&copy; 2025 Rachel's Personal Hub. All Rights Reserved.</p>
+        </div>
+    </footer>
+
 
     <script>
         // --- Chat Logic ---
