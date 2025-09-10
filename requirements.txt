@@ -5,3 +5,4 @@ chromadb
 sentence-transformers
 langchain-community
 google-generativeai
+firebase-admin
